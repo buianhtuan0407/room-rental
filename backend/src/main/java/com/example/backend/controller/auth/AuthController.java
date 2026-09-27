@@ -8,8 +8,9 @@ import com.example.backend.dto.res.ApiResponse;
 import com.example.backend.service.interfaces.auth.IAuthService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("api/auth")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class AuthController {
 
     private final IAuthService authService;
