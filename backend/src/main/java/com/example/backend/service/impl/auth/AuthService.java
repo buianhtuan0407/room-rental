@@ -1,6 +1,9 @@
 package com.example.backend.service.impl.auth;
 
+import com.example.backend.dto.req.auth.LoginRequest;
+import com.example.backend.dto.res.auth.TokenResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.backend.dto.req.auth.RegisterRequest;
@@ -18,6 +21,8 @@ public class AuthService implements IAuthService {
     private final UserRepository userRepository;
     private final IUserService userService;
     private final IOtpService otpService;
+    private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -39,5 +44,22 @@ public class AuthService implements IAuthService {
     @Override
     public void verifyOtp(VerifyOtpRequest request) {
         otpService.verifyOtp(request);
+    }
+
+    @Override
+    public TokenResponse login(LoginRequest request) {
+        User user = userService.getUserByEmail(request.getEmail());
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Mật khẩu không chính xác");
+        }
+        if (!user.isVerified()) {
+            throw new RuntimeException("Tài khoản chưa được xác thực OTP");
+        }
+        String accessToken = jwtService.generateToken(user, "ACCESS");
+        String refreshToken = jwtService.generateToken(user, "REFRESH");
+        return TokenResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 }

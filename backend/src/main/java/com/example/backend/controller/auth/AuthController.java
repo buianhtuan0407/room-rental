@@ -1,5 +1,6 @@
 package com.example.backend.controller.auth;
 
+import com.example.backend.dto.res.auth.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -35,5 +36,13 @@ public class AuthController {
                 .build();
     }
 
-
+    @PostMapping("/login")
+    public ApiResponse<TokenResponse> login(@RequestBody LoginRequest request) {
+        TokenResponse tokenResponse = authService.login(request);
+        return ApiResponse.<TokenResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Đăng nhập thành công.")
+                .data(tokenResponse)
+                .build();
+    }
 }
