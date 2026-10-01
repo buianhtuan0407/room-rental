@@ -17,12 +17,24 @@ export default function Login() {
         setLoading(true);
 
         try {
-            const response = await loginUser({ email, password });
+            const res = await loginUser({ email, password });
+            const data = res.data || res;
+            const token = data.accessToken || data.token;
 
-            if (response && response.accessToken) {
-                localStorage.setItem('accessToken', response.accessToken);
-                localStorage.setItem('refreshToken', response.refreshToken);
+            if (token) {
+                localStorage.setItem('accessToken', token);
+                if (data.refreshToken) {
+                    localStorage.setItem('refreshToken', data.refreshToken);
+                }
+
+                const userInfo = data.user || { name: email.split('@')[0], email };
+                localStorage.setItem('user', JSON.stringify(userInfo));
+
+                window.dispatchEvent(new Event('authChange'));
+
                 navigate('/');
+            } else {
+                setError('Đăng nhập thất bại: Không tìm thấy Token xác thực!');
             }
         } catch (err) {
             const errorMessage = err.response?.data?.message || 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin!';
@@ -61,7 +73,6 @@ export default function Login() {
                     />
                 </div>
 
-                {/* Quên mật khẩu nằm ở góc phải phía trên nút đăng nhập */}
                 <div className={styles.forgotPasswordWrapper}>
                     <Link to="/forgot-password">Quên mật khẩu?</Link>
                 </div>

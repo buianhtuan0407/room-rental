@@ -1,0 +1,446 @@
+$primary-color: #1a73e8;
+$primary-hover: #1557b0;
+$primary-light: #e8f0fe;
+$text-dark: #2c3e50;
+$text-gray: #5f6368;
+$bg-light: #f8f9fa;
+$white: #ffffff;
+$border-color: #e0e0e0;
+
+.homeContainer {
+  width: 100%;
+  background-color: $bg-light;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.mainWrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+}
+
+.heroSection {
+  position: relative;
+  height: 380px;
+  background-image: url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1600&q=80');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .heroOverlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 30, 60, 0.45);
+  }
+
+  .heroContent {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 900px;
+    padding: 0 20px;
+    text-align: center;
+
+    .heroTitle {
+      color: $white;
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 24px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+.searchBox {
+  background: $white;
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .searchInputGroup {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .searchIcon {
+      position: absolute;
+      left: 14px;
+      width: 20px;
+      height: 20px;
+      color: $text-gray;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 14px 14px 44px;
+      border: 1px solid $border-color;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+
+      &:focus {
+        border-color: $primary-color;
+      }
+    }
+  }
+
+  .searchFilters {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 12px;
+
+    select {
+      padding: 12px;
+      border: 1px solid $border-color;
+      border-radius: 10px;
+      font-size: 14px;
+      color: $text-dark;
+      outline: none;
+      background-color: $white;
+      cursor: pointer;
+
+      &:focus {
+        border-color: $primary-color;
+      }
+    }
+
+    .searchBtn {
+      background-color: $primary-color;
+      color: $white;
+      border: none;
+      padding: 0 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      &:hover {
+        background-color: $primary-hover;
+      }
+    }
+  }
+}
+
+.quickAccess {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: -30px;
+  position: relative;
+  z-index: 3;
+
+  .accessCard {
+    background: $white;
+    padding: 20px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 16px rgba(26, 115, 232, 0.12);
+    }
+
+    .iconWrapper {
+      width: 46px;
+      height: 46px;
+      background-color: $primary-light;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    span {
+      font-weight: 700;
+      font-size: 15px;
+      color: $text-dark;
+    }
+  }
+}
+
+.featuredSection {
+  margin-top: 48px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+
+  h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: $text-dark;
+  }
+
+  .viewMore {
+    color: $primary-color;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 14px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .countBadge {
+    background-color: $primary-light;
+    color: $primary-color;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+}
+
+.roomGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.roomCard {
+  background: $white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid $border-color;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .imageBox {
+    position: relative;
+    height: 200px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(26, 115, 232, 0.9);
+      color: $white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .favoriteBtn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255, 255, 255, 0.85);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      svg {
+        width: 18px;
+        height: 18px;
+        stroke: $text-dark;
+      }
+
+      &:hover svg {
+        stroke: #e63946;
+        fill: #e63946;
+      }
+    }
+  }
+
+  .roomContent {
+    padding: 16px;
+
+    .priceRow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+
+      .price {
+        font-size: 18px;
+        font-weight: 800;
+        color: $primary-color;
+      }
+
+      .area {
+        font-size: 13px;
+        color: $text-gray;
+        font-weight: 600;
+      }
+    }
+
+    .title {
+      font-size: 15px;
+      font-weight: 700;
+      color: $text-dark;
+      margin-bottom: 8px;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .location {
+      font-size: 13px;
+      color: $text-gray;
+      margin-bottom: 16px;
+    }
+
+    .detailBtn {
+      width: 100%;
+      background-color: $primary-light;
+      color: $primary-color;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: $primary-color;
+        color: $white;
+      }
+    }
+  }
+}
+
+.mapSection {
+  margin-top: 48px;
+
+  .mapContainer {
+    height: 280px;
+    background-color: #e5e3df;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid $border-color;
+
+    .mockMap {
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+              45deg,
+              #e5e3df,
+              #e5e3df 10px,
+              #dcd8d0 10px,
+              #dcd8d0 20px
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .mapNotice {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        color: $text-dark;
+      }
+
+      .mapPin {
+        position: absolute;
+        background: $primary-color;
+        color: $white;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 700;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -4px;
+          left: 50%;
+          transform: translateX(-50%);
+          border-width: 4px 4px 0;
+          border-style: solid;
+          border-color: $primary-color transparent;
+        }
+      }
+    }
+  }
+}
+
+.landlordBanner {
+  margin-top: 48px;
+  background: linear-gradient(135deg, $primary-color, #0b4fba);
+  border-radius: 16px;
+  padding: 40px;
+  color: $white;
+  text-align: center;
+
+  .bannerText {
+    max-width: 600px;
+    margin: 0 auto;
+
+    h2 {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    p {
+      font-size: 15px;
+      opacity: 0.9;
+      margin-bottom: 20px;
+    }
+
+    .bannerBtn {
+      background-color: $white;
+      color: $primary-color;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+
+      &:hover {
+        transform: scale(1.03);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+}
