@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import {
     FiBarChart2, FiUsers, FiFileText, FiDollarSign,
     FiAlertTriangle, FiShieldOff, FiTag, FiPackage,
@@ -16,9 +16,33 @@ import BlacklistTab from "../../pages/Admin/BlacklistTab";
 import VouchersTab from "../../pages/Admin/VouchersTab";
 import PackagesTab from "../../pages/Admin/PackagesTab";
 
+const parseJwt = (token) => {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+            window.atob(base64)
+                .split('')
+                .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                .join('')
+        );
+        return JSON.parse(jsonPayload);
+    } catch (e) {
+        return null;
+    }
+};
+
 export default function AdminLayout() {
     const [searchParams, setSearchParams] = useSearchParams();
+    const navigate = useNavigate();
     const activeTab = searchParams.get('tab') || 'analytics';
+
+    const storedUser = localStorage.getItem('user');
+    const user = storedUser ? JSON.parse(storedUser) : null;
+    const token = localStorage.getItem('accessToken');
+    const decodedToken = token ? parseJwt(token) : null;
+
+    const username = user?.username || decodedToken?.username || user?.email || decodedToken?.sub || 'Quản trị viên';
 
     const menuItems = [
         { id: 'analytics', label: 'Thống kê hệ thống', icon: <FiBarChart2 /> },
@@ -33,6 +57,14 @@ export default function AdminLayout() {
 
     const handleTabChange = (tabId) => {
         setSearchParams({ tab: tabId });
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('user');
+        window.dispatchEvent(new Event('authChange'));
+        navigate('/login');
     };
 
     const renderContent = () => {
@@ -80,8 +112,12 @@ export default function AdminLayout() {
                         </span>
                     </div>
                     <div className={styles.rightHeader}>
-                        <span className={styles.adminName}>Xin chào, Quản trị viên</span>
-                        <button className={styles.logoutBtn}><FiLogOut size={16} /> Đăng xuất</button>
+                        <span className={styles.adminName}>
+                            Xin chào, {username}
+                        </span>
+                        <button className={styles.logoutBtn} onClick={handleLogout}>
+                            <FiLogOut size={16} /> Đăng xuất
+                        </button>
                     </div>
                 </header>
 

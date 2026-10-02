@@ -26,14 +26,13 @@ export default function AppRoutes() {
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/login" element={<Login />} />
 
-                {/*<Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>*/}
-                {/*    <Route path="/admin" element={<AdminLayout />} />*/}
-                {/*</Route>*/}
-                <Route path="/admin" element={<AdminLayout />} />
-                {/*<Route element={<ProtectedRoute allowedRoles={['LANDLORD']} />}>*/}
-                {/*    <Route path="/landlord" element={<LandlordLayout />} />*/}
-                {/*</Route>*/}
-                <Route path="/landlord" element={<LandlordLayout />} />
+                <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
+                    <Route path="/admin" element={<AdminLayout />} />
+                </Route>
+
+                <Route element={<ProtectedRoute allowedRoles={['LANDLORD']} />}>
+                    <Route path="/landlord" element={<LandlordLayout />} />
+                </Route>
 
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

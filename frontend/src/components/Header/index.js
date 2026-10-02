@@ -10,6 +10,22 @@ import {
 } from 'react-icons/fi';
 import styles from './Header.module.scss';
 
+const parseJwt = (token) => {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+            window.atob(base64)
+                .split('')
+                .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                .join('')
+        );
+        return JSON.parse(jsonPayload);
+    } catch (e) {
+        return null;
+    }
+};
+
 export default function Header() {
     const [activeTab, setActiveTab] = useState('all');
     const [savedCount, setSavedCount] = useState(2);
@@ -18,15 +34,30 @@ export default function Header() {
 
     const loadUser = () => {
         const storedUser = localStorage.getItem('user');
+        const token = localStorage.getItem('accessToken');
+        let parsedUser = null;
+
         if (storedUser) {
             try {
-                setUser(JSON.parse(storedUser));
+                parsedUser = JSON.parse(storedUser);
             } catch (error) {
                 console.error("Error parsing user data:", error);
             }
-        } else {
-            setUser(null);
         }
+
+        if (token) {
+            const decoded = parseJwt(token);
+            if (decoded) {
+                parsedUser = {
+                    ...parsedUser,
+                    username: decoded.username || parsedUser?.username || decoded.sub,
+                    email: decoded.sub || parsedUser?.email,
+                    role: decoded.role || parsedUser?.role
+                };
+            }
+        }
+
+        setUser(parsedUser);
     };
 
     useEffect(() => {

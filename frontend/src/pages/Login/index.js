@@ -4,6 +4,22 @@ import { loginUser } from '../../services/authService';
 import styles from './Login.module.scss';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 
+const parseJwt = (token) => {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+            window.atob(base64)
+                .split('')
+                .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                .join('')
+        );
+        return JSON.parse(jsonPayload);
+    } catch (e) {
+        return null;
+    }
+};
+
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -27,12 +43,32 @@ export default function Login() {
                     localStorage.setItem('refreshToken', data.refreshToken);
                 }
 
-                const userInfo = data.user || { name: email.split('@')[0], email };
+                const decodedToken = parseJwt(token);
+
+                const userInfo = data.user || {
+                    id: decodedToken?.id,
+                    username: decodedToken?.username || data.username || email.split('@')[0],
+                    email: decodedToken?.sub || email,
+                    role: decodedToken?.role || data.role || 'USER'
+                };
+
                 localStorage.setItem('user', JSON.stringify(userInfo));
 
                 window.dispatchEvent(new Event('authChange'));
 
-                navigate('/');
+                const userRole = userInfo.role ? userInfo.role.toUpperCase() : 'USER';
+
+                switch (userRole) {
+                    case 'ADMIN':
+                        navigate('/admin');
+                        break;
+                    case 'LANDLORD':
+                        navigate('/landlord');
+                        break;
+                    default:
+                        navigate('/');
+                        break;
+                }
             } else {
                 setError('Đăng nhập thất bại: Không tìm thấy Token xác thực!');
             }

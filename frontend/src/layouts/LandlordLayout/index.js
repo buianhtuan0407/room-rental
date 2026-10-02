@@ -19,6 +19,22 @@ import PackagesTab from "../../pages/Landlord/PackagesTab";
 import ChatTab from "../../pages/Landlord/ChatTab";
 import ReportsTab from "../../pages/Landlord/ReportsTab";
 
+const parseJwt = (token) => {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+            window.atob(base64)
+                .split('')
+                .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                .join('')
+        );
+        return JSON.parse(jsonPayload);
+    } catch (e) {
+        return null;
+    }
+};
+
 export default function LandlordLayout() {
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -26,6 +42,10 @@ export default function LandlordLayout() {
 
     const storedUser = localStorage.getItem('user');
     const user = storedUser ? JSON.parse(storedUser) : null;
+    const token = localStorage.getItem('accessToken');
+    const decodedToken = token ? parseJwt(token) : null;
+
+    const username = user?.username || decodedToken?.username || user?.email || decodedToken?.sub || 'Chủ trọ';
 
     const menuItems = [
         { id: 'analytics', label: 'Thống kê hệ thống', icon: <FiBarChart2 /> },
@@ -92,7 +112,7 @@ export default function LandlordLayout() {
                     </div>
                     <div className={styles.rightHeader}>
                         <span className={styles.adminName}>
-                            Xin chào, {user?.username || user?.name || user?.email || 'Chủ trọ'}
+                            Xin chào, {username}
                         </span>
                         <button className={styles.logoutBtn} onClick={handleLogout}>
                             <FiLogOut size={16} /> Đăng xuất
