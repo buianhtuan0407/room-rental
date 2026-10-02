@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     FiSearch,
     FiHeart,
@@ -12,12 +13,14 @@ import { FaGraduationCap, FaDog } from 'react-icons/fa';
 import styles from './Home.module.scss';
 
 export default function Home() {
+    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useState({
         location: '',
         district: '',
         price: '',
         type: ''
     });
+    const [likedRooms, setLikedRooms] = useState([]);
 
     const featuredRooms = [
         {
@@ -81,6 +84,20 @@ export default function Home() {
         setSearchParams(prev => ({ ...prev, [name]: value }));
     }
 
+    function handleSearch(e) {
+        e.preventDefault();
+        const query = new URLSearchParams(searchParams).toString();
+        navigate(`/search?${query}`);
+    }
+
+    function toggleLike(roomId) {
+        setLikedRooms(prev =>
+            prev.includes(roomId)
+                ? prev.filter(id => id !== roomId)
+                : [...prev, roomId]
+        );
+    }
+
     return (
         <main className={styles.homeContainer}>
             <section className={styles.heroSection}>
@@ -88,7 +105,7 @@ export default function Home() {
                 <div className={styles.heroContent}>
                     <h1 className={styles.heroTitle}>TÌM NHÀ ĐƠN GIẢN, TRỌ NHANH, GIÁ TỐT!</h1>
 
-                    <div className={styles.searchBox}>
+                    <form className={styles.searchBox} onSubmit={handleSearch}>
                         <div className={styles.searchInputGroup}>
                             <FiSearch className={styles.searchIcon} size={20} />
                             <input
@@ -106,6 +123,8 @@ export default function Home() {
                                 <option value="q10">Quận 10</option>
                                 <option value="q3">Quận 3</option>
                                 <option value="bt">Bình Thạnh</option>
+                                <option value="tb">Tân Bình</option>
+                                <option value="q7">Quận 7</option>
                             </select>
 
                             <select name="price" value={searchParams.price} onChange={handleInputChange}>
@@ -122,36 +141,36 @@ export default function Home() {
                                 <option value="canho">Căn hộ</option>
                             </select>
 
-                            <button className={styles.searchBtn}>
+                            <button type="submit" className={styles.searchBtn}>
                                 <FiSearch size={18} style={{ marginRight: '6px' }} />
                                 <span>Tìm kiếm</span>
                             </button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </section>
 
             <div className={styles.mainWrapper}>
                 <section className={styles.quickAccess}>
-                    <div className={styles.accessCard}>
+                    <div className={styles.accessCard} onClick={() => navigate('/search?filter=university')}>
                         <div className={styles.iconWrapper}>
-                            <FaGraduationCap size={22} color="#2563eb" />
+                            <FaGraduationCap size={22} color="#1d72b8" />
                         </div>
                         <span>Gần Trường Đại Học</span>
                     </div>
-                    <div className={styles.accessCard}>
+                    <div className={styles.accessCard} onClick={() => navigate('/search?price=under3')}>
                         <div className={styles.iconWrapper}>
                             <FiDollarSign size={22} color="#16a34a" />
                         </div>
                         <span>Dưới 3 Triệu</span>
                     </div>
-                    <div className={styles.accessCard}>
+                    <div className={styles.accessCard} onClick={() => navigate('/search?filter=no-owner')}>
                         <div className={styles.iconWrapper}>
                             <FiKey size={22} color="#d97706" />
                         </div>
                         <span>Không Chung Chủ</span>
                     </div>
-                    <div className={styles.accessCard}>
+                    <div className={styles.accessCard} onClick={() => navigate('/search?filter=pet-friendly')}>
                         <div className={styles.iconWrapper}>
                             <FaDog size={22} color="#9333ea" />
                         </div>
@@ -162,19 +181,24 @@ export default function Home() {
                 <section className={styles.featuredSection}>
                     <div className={styles.sectionHeader}>
                         <h2>Phòng Trọ Nổi Bật</h2>
-                        <a href="#all" className={styles.viewMore}>
+                        <button onClick={() => navigate('/search')} className={styles.viewMore}>
                             Xem tất cả <FiChevronRight />
-                        </a>
+                        </button>
                     </div>
 
                     <div className={styles.roomGrid}>
-                        {featuredRooms.map(function(room) {
+                        {featuredRooms.map((room) => {
+                            const isLiked = likedRooms.includes(room.id);
                             return (
                                 <div key={room.id} className={styles.roomCard}>
                                     <div className={styles.imageBox}>
                                         <img src={room.image} alt={room.title} />
                                         <span className={styles.badge}>{room.badge}</span>
-                                        <button className={styles.favoriteBtn} aria-label="Lưu phòng">
+                                        <button
+                                            className={`${styles.favoriteBtn} ${isLiked ? styles.liked : ''}`}
+                                            aria-label="Lưu phòng"
+                                            onClick={() => toggleLike(room.id)}
+                                        >
                                             <FiHeart size={18} />
                                         </button>
                                     </div>
@@ -189,7 +213,12 @@ export default function Home() {
                                             <FiMapPin style={{ marginRight: '4px', verticalAlign: 'middle' }} />
                                             {room.location}
                                         </p>
-                                        <button className={styles.detailBtn}>Xem chi tiết</button>
+                                        <button
+                                            className={styles.detailBtn}
+                                            onClick={() => navigate(`/room/${room.id}`)}
+                                        >
+                                            Xem chi tiết
+                                        </button>
                                     </div>
                                 </div>
                             );
@@ -211,9 +240,12 @@ export default function Home() {
                             <div className={styles.mapPin} style={{ top: '55%', left: '52%' }}>
                                 <span>4.2 Tr</span>
                             </div>
+                            <div className={styles.mapPin} style={{ top: '30%', left: '35%' }}>
+                                <span>1.8 Tr</span>
+                            </div>
                             <p className={styles.mapNotice}>
                                 <FiMap style={{ marginRight: '6px', verticalAlign: 'middle' }} />
-                                Bản đồ khu vực Hồ Chí Minh
+                                Bản đồ khu vực TP. Hồ Chí Minh
                             </p>
                         </div>
                     </div>
@@ -223,7 +255,9 @@ export default function Home() {
                     <div className={styles.bannerText}>
                         <h2>Dành Cho Chủ Trọ</h2>
                         <p>Đăng tin miễn phí, tiếp cận hàng ngàn người thuê trọ mỗi ngày!</p>
-                        <button className={styles.bannerBtn}>Đăng Tin Miễn Phí</button>
+                        <button className={styles.bannerBtn} onClick={() => navigate('/post')}>
+                            Đăng Tin Miễn Phí
+                        </button>
                     </div>
                 </section>
             </div>

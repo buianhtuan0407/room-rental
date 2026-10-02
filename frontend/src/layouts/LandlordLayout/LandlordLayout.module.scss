@@ -1,0 +1,163 @@
+$sidebar-bg: #222d32;
+$sidebar-hover: #1e282c;
+$sidebar-active: #0073b7;
+$text-light: #b8c7ce;
+$bg-body: #ecf0f5;
+$border-color: #d2d6de;
+$primary-color: #3c8dbc;
+$white: #ffffff;
+
+.adminContainer {
+  display: flex;
+  min-height: 100vh;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: $bg-body;
+}
+
+// SIDEBAR
+.sidebar {
+  width: 250px;
+  background-color: $sidebar-bg;
+  color: $white;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.brand {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: darken($primary-color, 10%);
+  letter-spacing: 1px;
+}
+
+.navMenu {
+  padding-top: 20px;
+
+  .menuTitle {
+    color: darken($text-light, 20%);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 10px 15px;
+    text-transform: uppercase;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .menuItem {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    background: transparent;
+    border: none;
+    border-left: 3px solid transparent; // Viền vuông vức
+    color: $text-light;
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    .icon {
+      margin-right: 12px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+    }
+
+    &:hover {
+      background-color: $sidebar-hover;
+      color: $white;
+    }
+
+    &.active {
+      background-color: $sidebar-hover;
+      color: $white;
+      border-left: 3px solid $primary-color;
+    }
+  }
+}
+
+// MAIN WRAPPER
+.mainWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+// HEADER
+.topHeader {
+  height: 50px;
+  background-color: $primary-color;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  color: $white;
+
+  .leftHeader {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .toggleBtn {
+    background: transparent;
+    border: none;
+    color: $white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  .breadcrumb {
+    font-size: 14px;
+  }
+
+  .rightHeader {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .adminName {
+    font-size: 14px;
+  }
+
+  .logoutBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: darken($primary-color, 15%);
+    color: $white;
+    border: 1px solid darken($primary-color, 20%);
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 2px;
+
+    &:hover {
+      background: darken($primary-color, 20%);
+    }
+  }
+}
+
+// CONTENT AREA
+.mainContent {
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+}
