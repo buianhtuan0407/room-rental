@@ -4,6 +4,22 @@ import { loginUser } from '../../services/authService';
 import styles from './Login.module.scss';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 
+const parseJwt = (token) => {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+            window.atob(base64)
+                .split('')
+                .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                .join('')
+        );
+        return JSON.parse(jsonPayload);
+    } catch (e) {
+        return null;
+    }
+};
+
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -17,12 +33,44 @@ export default function Login() {
         setLoading(true);
 
         try {
-            const response = await loginUser({ email, password });
+            const res = await loginUser({ email, password });
+            const data = res.data || res;
+            const token = data.accessToken || data.token;
 
-            if (response && response.accessToken) {
-                localStorage.setItem('accessToken', response.accessToken);
-                localStorage.setItem('refreshToken', response.refreshToken);
-                navigate('/');
+            if (token) {
+                localStorage.setItem('accessToken', token);
+                if (data.refreshToken) {
+                    localStorage.setItem('refreshToken', data.refreshToken);
+                }
+
+                const decodedToken = parseJwt(token);
+
+                const userInfo = data.user || {
+                    id: decodedToken?.id,
+                    username: decodedToken?.username || data.username || email.split('@')[0],
+                    email: decodedToken?.sub || email,
+                    role: decodedToken?.role || data.role || 'USER'
+                };
+
+                localStorage.setItem('user', JSON.stringify(userInfo));
+
+                window.dispatchEvent(new Event('authChange'));
+
+                const userRole = userInfo.role ? userInfo.role.toUpperCase() : 'USER';
+
+                switch (userRole) {
+                    case 'ADMIN':
+                        navigate('/admin');
+                        break;
+                    case 'LANDLORD':
+                        navigate('/landlord');
+                        break;
+                    default:
+                        navigate('/');
+                        break;
+                }
+            } else {
+                setError('Đăng nhập thất bại: Không tìm thấy Token xác thực!');
             }
         } catch (err) {
             const errorMessage = err.response?.data?.message || 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin!';
@@ -61,7 +109,6 @@ export default function Login() {
                     />
                 </div>
 
-                {/* Quên mật khẩu nằm ở góc phải phía trên nút đăng nhập */}
                 <div className={styles.forgotPasswordWrapper}>
                     <Link to="/forgot-password">Quên mật khẩu?</Link>
                 </div>

@@ -1,9 +1,15 @@
 import React, { useState, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { registerUser, verifyOtpData } from '../../services/authService';
 import styles from './Register.module.scss';
-import { FaUser, FaEnvelope, FaLock, FaPhone, FaPaperPlane, FaShieldAlt, FaFacebook, FaGoogle, FaEye, FaEyeSlash } from 'react-icons/fa';
+import {
+    FaUser, FaEnvelope, FaLock, FaPhone,
+    FaPaperPlane, FaShieldAlt, FaFacebook,
+    FaGoogle, FaEye, FaEyeSlash, FaUserTag
+} from 'react-icons/fa';
 
 export default function Register() {
+    const navigate = useNavigate();
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
@@ -13,7 +19,8 @@ export default function Register() {
         username: '',
         email: '',
         password: '',
-        phone: ''
+        phone: '',
+        role: 'USER'
     });
 
     const [errors, setErrors] = useState({
@@ -113,7 +120,14 @@ export default function Register() {
         setMessage('');
         try {
             await verifyOtpData({ email: formData.email, otp: otpCode });
-            setMessage('Xác thực tài khoản thành công! Bạn có thể tiến hành đăng nhập.');
+
+            // Thông báo và tự động chuyển hướng sau 1.5 giây
+            setMessage('Xác thực thành công! Đang chuyển hướng sang trang đăng nhập...');
+
+            setTimeout(() => {
+                navigate('/login');
+            }, 1500);
+
         } catch (error) {
             setMessage('Xác thực thất bại: ' + (error.response?.data?.message || 'Mã OTP không hợp lệ hoặc đã hết hạn.'));
         } finally {
@@ -139,6 +153,21 @@ export default function Register() {
                 {step === 1 ? (
                     <form onSubmit={handleRegisterSubmit} className={styles.form}>
                         <div className={styles.inputGroup}>
+                            <label>
+                                <FaUserTag /> Loại tài khoản:
+                            </label>
+                            <select
+                                name="role"
+                                value={formData.role}
+                                onChange={handleInputChange}
+                                className={styles.selectInput}
+                            >
+                                <option value="USER">Khách thuê trọ</option>
+                                <option value="LANDLORD">Chủ trọ / Cho thuê</option>
+                            </select>
+                        </div>
+
+                        <div className={styles.inputGroup}>
                             <label className={errors.username ? styles.errorLabel : ''}>
                                 <FaUser /> Tên đăng nhập: {errors.username && <span className={styles.requiredStar}>*</span>}
                             </label>
@@ -151,6 +180,7 @@ export default function Register() {
                                 required
                             />
                         </div>
+
                         <div className={styles.inputGroup}>
                             <label className={errors.email ? styles.errorLabel : ''}>
                                 <FaEnvelope /> Email: {errors.email && <span className={styles.requiredStar}>*</span>}
@@ -164,6 +194,7 @@ export default function Register() {
                                 required
                             />
                         </div>
+
                         <div className={styles.inputGroup}>
                             <label className={errors.phone ? styles.errorLabel : ''}>
                                 <FaPhone /> Số điện thoại: {errors.phone && <span className={styles.requiredStar}>*</span>}
@@ -177,6 +208,7 @@ export default function Register() {
                                 required
                             />
                         </div>
+
                         <div className={styles.inputGroup}>
                             <label className={errors.password ? styles.errorLabel : ''}>
                                 <FaLock /> Mật khẩu: {errors.password && <span className={styles.requiredStar}>*</span>}
@@ -216,6 +248,11 @@ export default function Register() {
                                 <FaGoogle /> Google
                             </button>
                         </div>
+
+                        <div className={styles.loginLink}>
+                            <span>Đã có tài khoản? </span>
+                            <Link to="/login">Đăng nhập ngay</Link>
+                        </div>
                     </form>
                 ) : (
                     <form onSubmit={handleVerifySubmit} className={styles.form}>
@@ -241,6 +278,11 @@ export default function Register() {
                         <button type="submit" disabled={loading} className={`${styles.button} ${styles.verifyBtn}`}>
                             <FaShieldAlt /> {loading ? 'Đang xác thực...' : 'Xác thực OTP'}
                         </button>
+
+                        <div className={styles.loginLink}>
+                            <span>Đã có tài khoản? </span>
+                            <Link to="/login">Đăng nhập ngay</Link>
+                        </div>
                     </form>
                 )}
             </div>

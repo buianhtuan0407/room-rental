@@ -1,0 +1,283 @@
+$sidebar-bg: #222d32;
+$sidebar-hover: #1e282c;
+$sidebar-active: #0073b7;
+$text-light: #b8c7ce;
+$bg-body: #ecf0f5;
+$border-color: #d2d6de;
+$primary-color: #1d72b8;
+$white: #ffffff;
+
+.adminContainer {
+  display: flex;
+  min-height: 100vh;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: $bg-body;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: $sidebar-bg;
+  color: $white;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  height: 60px;
+  background-color: darken($sidebar-bg, 4%);
+  cursor: pointer;
+  flex-shrink: 0;
+
+  .logoIcon {
+    width: 38px;
+    height: 38px;
+    background-color: $primary-color;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $white;
+    flex-shrink: 0;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .logoText {
+    display: flex;
+    flex-direction: column;
+
+    .brandName {
+      font-size: 18px;
+      font-weight: 800;
+      color: $white;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+
+    .tagline {
+      font-size: 8px;
+      font-weight: 700;
+      color: $text-light;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+      white-space: nowrap;
+    }
+  }
+}
+
+.navMenu {
+  padding-top: 10px;
+
+  .menuTitle {
+    color: darken($text-light, 20%);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 10px 15px;
+    text-transform: uppercase;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .menuItem {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    background: transparent;
+    border: none;
+    border-left: 3px solid transparent;
+    color: $text-light;
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    .icon {
+      margin-right: 12px;
+      font-size: 16px;
+    }
+
+    &:hover {
+      background-color: $sidebar-hover;
+      color: $white;
+    }
+
+    &.active {
+      background-color: $sidebar-hover;
+      color: $white;
+      border-left: 3px solid $primary-color;
+    }
+  }
+}
+
+.mainWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topHeader {
+  height: 50px;
+  background-color: $primary-color;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  color: $white;
+
+  .leftHeader {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .toggleBtn {
+    background: transparent;
+    border: none;
+    color: $white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  .breadcrumb {
+    font-size: 14px;
+  }
+
+  .rightHeader {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .adminName {
+    font-size: 14px;
+  }
+
+  .logoutBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: darken($primary-color, 15%);
+    color: $white;
+    border: 1px solid darken($primary-color, 20%);
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 2px;
+
+    &:hover {
+      background: darken($primary-color, 20%);
+    }
+  }
+}
+
+.mainContent {
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.contentPanel {
+  background: $white;
+  border-top: 3px solid $primary-color;
+  border-bottom: 1px solid $border-color;
+  border-left: 1px solid $border-color;
+  border-right: 1px solid $border-color;
+  padding: 20px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+  border-radius: 0;
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #333;
+    font-weight: 500;
+  }
+}
+
+.headerPanel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  h3 {
+    margin-bottom: 0;
+  }
+}
+
+.primaryBtn {
+  background-color: #00a65a;
+  color: white;
+  border: 1px solid darken(#00a65a, 5%);
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 2px;
+
+  &:hover {
+    background-color: darken(#00a65a, 5%);
+  }
+}
+
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  th, td {
+    padding: 12px;
+    border: 1px solid #f4f4f4;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    border-bottom: 2px solid $border-color;
+  }
+
+  tr:hover {
+    background-color: #f5f5f5;
+  }
+}
+
+.statusPending {
+  background-color: #f39c12;
+  color: white;
+  padding: 3px 8px;
+  font-size: 12px;
+  border-radius: 2px;
+}
+
+.actionBtn {
+  background-color: #f4f4f4;
+  border: 1px solid #ddd;
+  padding: 4px 10px;
+  cursor: pointer;
+  border-radius: 2px;
+  font-size: 13px;
+
+  &:hover {
+    background-color: #e4e4e4;
+  }
+}

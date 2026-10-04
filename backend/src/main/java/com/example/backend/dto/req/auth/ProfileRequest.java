@@ -3,10 +3,7 @@ package com.example.backend.dto.req.auth;
 import lombok.Data;
 
 @Data
-public class RegisterRequest {
+public class ProfileRequest {
     private String username;
-    private String email;
-    private String password;
     private String phone;
-    private String role;
 }
