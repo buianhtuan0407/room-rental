@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import {
     FiBarChart2, FiUsers, FiFileText, FiDollarSign,
     FiAlertTriangle, FiShieldOff, FiTag, FiPackage,
-    FiMenu, FiLogOut
+    FiMenu, FiLogOut, FiHome
 } from 'react-icons/fi';
 
 import styles from './AdminLayout.module.scss';
@@ -84,7 +84,15 @@ export default function AdminLayout() {
     return (
         <div className={styles.adminContainer}>
             <aside className={styles.sidebar}>
-                <div className={styles.brand}>BẢNG QUẢN TRỊ</div>
+                <div className={styles.logo} onClick={() => navigate('/')}>
+                    <div className={styles.logoIcon}>
+                        <FiHome size={22} />
+                    </div>
+                    <div className={styles.logoText}>
+                        <span className={styles.brandName}>Tro Nhanh</span>
+                        <span className={styles.tagline}>THUÊ TRỌ AN TÂM</span>
+                    </div>
+                </div>
                 <nav className={styles.navMenu}>
                     <div className={styles.menuTitle}>DANH MỤC CHÍNH</div>
                     <ul>

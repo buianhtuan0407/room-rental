@@ -28,8 +28,16 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String extractUsername(String token) {
+    public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public String extractUsername(String token) {
+        return extractClaim(token, claims -> claims.get("username", String.class));
+    }
+
+    public String extractUserId(String token) {
+        return extractClaim(token, claims -> claims.get("id", String.class));
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -38,15 +46,15 @@ public class JwtService {
     }
 
     public String generateToken(User account, String tokenType) {
-
         long expirationTime = tokenType.equalsIgnoreCase("ACCESS")
                 ? accessExpiration
                 : refreshExpiration;
 
         return Jwts.builder()
                 .subject(account.getEmail())
-                .claim("role", account.getRole())
+                .claim("id", account.getId())
                 .claim("username", account.getUsername())
+                .claim("role", account.getRole())
                 .claim("type", tokenType)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expirationTime))
@@ -74,5 +82,4 @@ public class JwtService {
                 .parseSignedClaims(token)
                 .getPayload();
     }
-
 }

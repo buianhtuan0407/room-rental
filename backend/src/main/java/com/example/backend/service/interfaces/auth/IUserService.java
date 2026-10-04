@@ -1,5 +1,6 @@
 package com.example.backend.service.interfaces.auth;
 
+import com.example.backend.dto.req.auth.ProfileRequest;
 import com.example.backend.dto.req.auth.RegisterRequest;
 import com.example.backend.dto.res.auth.UserResponse;
 import com.example.backend.entity.User;
@@ -11,4 +12,10 @@ public interface IUserService {
     User getUserByEmail(String email);
     void enableUser(String email);
     void deleteUser(String id);
+    UserResponse getMyProfile();
+    UserResponse updateMyProfile(ProfileRequest request);
+    void toggleUserStatus(String id, boolean isActive);
+    UserResponse getUserById(String id);
+    List<UserResponse> getUsers();
+    List<UserResponse> getBannedUsers();
 }
